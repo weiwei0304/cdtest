@@ -3,25 +3,31 @@ name: Production Deploy
 
 #Trigger the workflow on push to the main branch
 on:
-    push:
-        branches:
-            - main
+  push:
+    branches:
+      - main
 
 jobs:
-    deploy:
-        runs-on: ubuntu-latest
-        steps:
-            # 取得程式碼
-            - name: Checkout code
-              uses: actions/checkout@v3
-            # 設定Node.js
-            - name: Setup Node.js
-              uses: actions/setup-node@v3
-              with:
-                  node-version: "20"
-            # 安裝依賴
-            - name: Install dependencies
-              run: npm install
-            # 建置專案
-            - name: Build project
-              run: npm run build
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      # 取得程式碼
+      - name: Checkout code
+        uses: actions/checkout@v3
+      # 設定Node.js
+      - name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: "20"
+      # 安裝依賴
+      - name: Install dependencies
+        run: npm install
+      # 執行linting
+      - name: Run linter
+        run: npm run lint
+      # 執行測試
+      - name: Run tests
+        run: npm test -- --run
+      # 建置專案
+      - name: Build project
+        run: npm run build
